@@ -1,8 +1,36 @@
 {
-  "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.52.0",
-    "@typescript-eslint/parser": "^5.52.0",
-    "eslint": "^8.34.0",
-    "prettier": "^2.8.4"
-  }
+	"name": "@htw-aladin/tag",
+	"version": "0.0.1",
+	"description": "Task artefact generators for the E-Learning platform ALADIN.",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"prepublish": "tsc"
+	},
+	"keywords": [
+		"aladin",
+		"task artefact generator",
+		"e-learning",
+		"elearning",
+		"graph",
+		"graph generator",
+		"generator",
+		"software artefact"
+	],
+	"author": "Paul Christ",
+	"license": "WTFPL",
+	"dependencies": {
+		"@types/seedrandom": "^3.0.5",
+		"alea": "^1.0.1",
+		"seedrandom": "^3.0.5",
+		"simplex-noise": "^4.0.1"
+	},
+	"devDependencies": {
+		"@types/node": "^18.14.2",
+		"@typescript-eslint/eslint-plugin": "^5.52.0",
+		"@typescript-eslint/parser": "^5.52.0",
+		"eslint": "^8.34.0",
+		"prettier": "^2.8.4",
+		"typescript": "^4.9.5"
+	}
 }
