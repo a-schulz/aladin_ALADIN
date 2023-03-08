@@ -3,3 +3,5 @@ node_modules
 *dll
 *dot
 /dist
+coverage
+coverage/*

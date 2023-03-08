@@ -43,7 +43,7 @@ export class GrGenEntity implements GrGenEntity {
 
 	protected constructEntityStrings(): { [key: string]: string } {
 		const abstractModifierString = this.writeAbstractModifier();
-		const classIdentifierString = `class ${this.name} `;
+		const classIdentifierString = `class ${this.name}`;
 		const inheritedEntitiesString = this.writeInheritedEntities();
 		const entityAttributesString = this.writeEntityAttributes();
 
@@ -59,7 +59,7 @@ export class GrGenEntity implements GrGenEntity {
 	protected writeInheritedEntities(): string {
 		if (this.inheritedEntities.length) {
 			const joinedEntities = this.inheritedEntities.join(", ");
-			return `extends ${joinedEntities} `;
+			return ` extends ${joinedEntities}`;
 		}
 		return "";
 	}
@@ -72,7 +72,7 @@ export class GrGenEntity implements GrGenEntity {
 				},
 				""
 			);
-			return `{\n${entityAttributes}}`;
+			return ` {\n${entityAttributes}}`;
 		}
 		return "";
 	}
