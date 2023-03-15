@@ -11,7 +11,7 @@
         "sourceMap": true,
         "outDir": "dist",
         "downlevelIteration": true,
-        "baseUrl": ".",
+        "baseUrl": "./src",
         "skipLibCheck": true,
         "paths": {
             "*": [
@@ -20,7 +20,10 @@
         }
     },
     "include": [
-        "."
+        "./src/**/*.ts",
+        "./src/**/*.d.ts",
+        "./test**/.ts",
+        "./test/**/*.d.ts",
     ],
     "exclude": [
         "node_modules",

@@ -1,5 +1,6 @@
 new graph singleStartEnd "EPC"
 
+record testRecord.grs start
 randomseed 3210
 
 debug enable
@@ -22,3 +23,5 @@ debug exec $[insertGatePattern][1:10]
 debug exec [populateAndGates] & [populateOpenXOrGates] & [populateXOrGates] & [populateLoop] & [populateLoop1] & [populateLoop2] & alternateEventsAndFunctions* & alternateEventsAndFunctions1*
 
 #show graph dot keep
+export test.grs
+record testRecord.grs stop

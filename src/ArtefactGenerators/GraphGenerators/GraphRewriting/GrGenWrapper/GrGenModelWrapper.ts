@@ -19,19 +19,13 @@ export enum GrGenEntityAttributeType {
 export interface GrGenEntityAttributes {
 	[key: string]: GrGenEntityAttributeType;
 }
-export interface GrGenEntity {
-	name: string;
-	isAbstract: boolean;
-	inheritedEntities: Array<string>;
-	entityAttributes: GrGenEntityAttributes;
-}
-export class GrGenEntity implements GrGenEntity {
+export class GrGenEntity {
 	protected entityType: string;
 	constructor(
-		public name: string,
-		public isAbstract: boolean = false,
-		public entityAttributes: GrGenEntityAttributes = {},
-		public inheritedEntities: Array<string> = []
+		protected name: string,
+		protected isAbstract: boolean = false,
+		protected entityAttributes: GrGenEntityAttributes = {},
+		protected inheritedEntities: Array<string> = []
 	) {}
 
 	public writeEntity(): string {
@@ -79,14 +73,14 @@ export class GrGenEntity implements GrGenEntity {
 }
 
 export class GrGenNode extends GrGenEntity {
-	protected entityType: string = "node";
 	constructor(
-		public name: string,
-		public isAbstract: boolean = false,
-		public entityAttributes: GrGenEntityAttributes = {},
-		public inheritedEntities: Array<string> = []
+		name: string,
+		isAbstract: boolean = false,
+		entityAttributes: GrGenEntityAttributes = {},
+		inheritedEntities: Array<string> = []
 	) {
 		super(name, isAbstract, entityAttributes, inheritedEntities);
+		this.entityType = "node";
 	}
 }
 
@@ -96,15 +90,15 @@ export enum GrGenEdgeType {
 	UNDIRECTED = "undirected",
 }
 export class GrGenEdge extends GrGenEntity {
-	protected entityType: string = "edge";
 	constructor(
-		public name: string,
-		public edgeType: GrGenEdgeType = GrGenEdgeType.DIRECTED,
-		public isAbstract: boolean = false,
-		public entityAttributes: GrGenEntityAttributes = {},
-		public inheritedEntities: Array<string> = []
+		name: string,
+		protected edgeType: GrGenEdgeType = GrGenEdgeType.DIRECTED,
+		isAbstract: boolean = false,
+		entityAttributes: GrGenEntityAttributes = {},
+		inheritedEntities: Array<string> = []
 	) {
 		super(name, isAbstract, entityAttributes, inheritedEntities);
+		this.entityType = "edge";
 	}
 
 	public writeEntity(): string {

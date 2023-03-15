@@ -4,7 +4,7 @@ import {
 	GrGenNode,
 	GrGenEntityAttributeType,
 	GrGenEdgeType,
-} from "../../../../src/ArtefactGenerators/GraphGenerators/GraphRewriting/GrGenWrapper";
+} from "../../../../src/ArtefactGenerators/GraphGenerators/GraphRewriting/GrGenWrapper/GrGenModelWrapper";
 
 const n = new GrGenNode("TestNode", true, { id: GrGenEntityAttributeType.INT, Type: GrGenEntityAttributeType.STRING });
 const n2 = new GrGenNode("TestNode2", false, {}, ["TestNode"]);
