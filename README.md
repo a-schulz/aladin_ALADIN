@@ -1,6 +1,4 @@
-# TAG
-
-The **TAG** (_Task artefact generators_) repository bundles different generators under a common interface for further use in **ALADIN**.
+# ALADIN
 
 ## Task artefact
 

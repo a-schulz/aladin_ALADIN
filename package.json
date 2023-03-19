@@ -1,7 +1,7 @@
 {
-	"name": "@htw-aladin/tag",
+	"name": "@htw-aladin/ALADIN",
 	"version": "0.0.1",
-	"description": "Task artefact generators for the E-Learning platform ALADIN.",
+	"description": "Tasks and solution (hints) generator destined for informatics and neighbouring domains",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
@@ -10,7 +10,7 @@
 	},
 	"keywords": [
 		"aladin",
-		"task artefact generator",
+		"task generator",
 		"e-learning",
 		"elearning",
 		"graph",
