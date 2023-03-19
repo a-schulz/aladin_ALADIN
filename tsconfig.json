@@ -5,7 +5,7 @@
         "emitDecoratorMetadata": true,
         "module": "commonjs",
         "esModuleInterop": true,
-        "target": "es6",
+        "target": "es2022",
         "noImplicitAny": true,
         "moduleResolution": "node",
         "sourceMap": true,

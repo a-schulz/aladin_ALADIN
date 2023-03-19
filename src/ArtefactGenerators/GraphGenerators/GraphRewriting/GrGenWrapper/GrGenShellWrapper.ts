@@ -33,6 +33,7 @@ export class TextTemplateEngine {
 	private templates: Templates = {};
 	constructor() {}
 
+	// TODO: Finish nested rendering
 	public render(template?: Template, data?: TemplateData): string {
 		if (!template) {
 		}

@@ -1,7 +1,7 @@
 import { createNoise3D } from "simplex-noise";
 import alea from "alea";
 import { ArtefactGenerator, ArtefactGeneratorParameters } from "../GeneratorBaseClass";
-import { NumericMatrix } from "../../ArtefactTypes/Matrix";
+import { Matrix } from "../../ArtefactTypes/Tensor";
 
 export interface SimplexNoise3DGeneratorParameters extends ArtefactGeneratorParameters {
 	gridX: number;
@@ -9,13 +9,13 @@ export interface SimplexNoise3DGeneratorParameters extends ArtefactGeneratorPara
 	scale: number;
 }
 
-export class SimplexNoise3DGenerator extends ArtefactGenerator<NumericMatrix> {
-	public generateArtefact(parameters: SimplexNoise3DGeneratorParameters): NumericMatrix {
+export class SimplexNoise3DGenerator extends ArtefactGenerator<Matrix<number>> {
+	public generateArtefact(parameters: SimplexNoise3DGeneratorParameters): Matrix<number> {
 		const { gridX, gridY, scale, seed } = parameters;
 		return this.generateNoise(gridX, gridY, scale, seed);
 	}
 
-	private generateNoise(gridX: number, gridY: number, scale: number, seed: string | number): NumericMatrix {
+	private generateNoise(gridX: number, gridY: number, scale: number, seed: string | number): Matrix<number> {
 		const noise3D = createNoise3D(alea(seed));
 
 		const noiseGrid = [];
