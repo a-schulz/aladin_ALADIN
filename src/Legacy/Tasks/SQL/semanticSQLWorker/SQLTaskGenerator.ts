@@ -1,4 +1,3 @@
-
 import fs from "fs";
 import { SQLDBReflection } from "./SQLDBReflection";
 import { SQLParser, SQLMetaDataParser } from "./SQLParser";
@@ -7,66 +6,74 @@ import { IOptions } from "./types";
 import { PgClient } from "../../../database/postgres/postgresDAO";
 import { RNG } from "../../../helpers/NumberGenerators";
 import { QueryGenerator } from "./SemanticSQLGenerator";
-import { performance } from 'perf_hooks';
+import { performance } from "perf_hooks";
 
 // const minioClient = new MinioClientWrapper();
 const SQL_TASK_DB = "imdb";
 
 interface SQLTaskDescription {
-    language: string;
-    parameters: IOptions;
+	language: string;
+	parameters: IOptions;
 }
 
-const semanticSqlQueryGenerator = async (taskDescription: SQLTaskDescription) => {
-    const start = performance.now();
-    const { language, parameters } = taskDescription;
-    const { schema, seed } = parameters;
+export const semanticSqlQueryGenerator = async (taskDescription: SQLTaskDescription) => {
+	const start = performance.now();
+	const { language, parameters } = taskDescription;
+	const { schema, seed } = parameters;
 
-    const sqlTaskClient = new PgClient(SQL_TASK_DB, "postgresql://admin:admin@localhost:5432/");
-    const reflector = new SQLDBReflection([schema], sqlTaskClient);
-    const reflection = await reflector.reflectDB();
-    const parser = new SQLMetaDataParser(reflection);
-    const parsedMetaData = parser.parseMetaData();
-    parsedMetaData.primaryTables = ["title", "person"];
-    parsedMetaData.junctionTables = ["person_profession", "title_genre", "person_title"];
-    parsedMetaData.attributeTables = ["localization", "format", "name", "region", "title_name", "year", "genre", "profession"];
+	const sqlTaskClient = new PgClient(SQL_TASK_DB, "postgresql://admin:admin@localhost:5432/");
+	const reflector = new SQLDBReflection([schema], sqlTaskClient);
+	const reflection = await reflector.reflectDB();
+	const parser = new SQLMetaDataParser(reflection);
+	const parsedMetaData = parser.parseMetaData();
+	parsedMetaData.primaryTables = ["title", "person"];
+	parsedMetaData.junctionTables = ["person_profession", "title_genre", "person_title"];
+	parsedMetaData.attributeTables = [
+		"localization",
+		"format",
+		"name",
+		"region",
+		"title_name",
+		"year",
+		"genre",
+		"profession",
+	];
 
-    const qb = new QueryGenerator(parsedMetaData, parameters, sqlTaskClient, schema, new RNG(seed));
-    const query = await qb.generateQuery();
+	const qb = new QueryGenerator(parsedMetaData, parameters, sqlTaskClient, schema, new RNG(seed));
+	const query = await qb.generateQuery();
 
-    const sqlParser = new SQLParser();
-    const parsedQuery = sqlParser.parse(query, schema);
+	const sqlParser = new SQLParser();
+	const parsedQuery = sqlParser.parse(query, schema);
 
-    const nlgPipeline = new NLGPipeline(language);
-    const { baselineNlQuery, unMaskedNlQuery } = await nlgPipeline.translateQuery(query);
-    const done = performance.now();
+	const nlgPipeline = new NLGPipeline(language);
+	const { baselineNlQuery, unMaskedNlQuery } = await nlgPipeline.translateQuery(query);
+	const done = performance.now();
 
-    return {
-        query,
-        parsedQuery,
-        nlQuery: unMaskedNlQuery,
-        baselineNlQuery,
-        executionTime: done - start
-    };
+	return {
+		query,
+		parsedQuery,
+		nlQuery: unMaskedNlQuery,
+		baselineNlQuery,
+		executionTime: done - start,
+	};
 };
 
-
 function escape(value: string): string {
-    if (!['"', "\r", "\n", ","].some((e) => value.indexOf(e) !== -1)) {
-        return value;
-    }
-    return '"' + value.replace(/"/g, '""') + '"';
+	if (!['"', "\r", "\n", ","].some((e) => value.indexOf(e) !== -1)) {
+		return value;
+	}
+	return '"' + value.replace(/"/g, '""') + '"';
 }
 
 const randomSeed = (length: number): string => {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    for (let i = 0; i < length; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-}
+	let result = "";
+	const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	const charactersLength = characters.length;
+	for (let i = 0; i < length; i++) {
+		result += characters.charAt(Math.floor(Math.random() * charactersLength));
+	}
+	return result;
+};
 
 // (async () => {
 //     const stream = fs.createWriteStream("queries.json", { flags: "a" });
@@ -96,7 +103,6 @@ const randomSeed = (length: number): string => {
 //         });
 //         console.log("generatedQuery");
 
-        
 //         const sqlTaskClient = new PgClient(SQL_TASK_DB, "postgresql://admin:admin@localhost:5432/");
 //         let result = [];
 //         try {
@@ -105,7 +111,7 @@ const randomSeed = (length: number): string => {
 //             console.log("error");
 //         }
 //         console.log("fetchedResult");
-    
+
 //         if (result.length) {
 //             // stream.write(`${escape(parsedQuery.replace(/\n/g, " "))},${escape(baselineNlQuery)},${escape(nlQuery)},\n`);
 //             stream.write(JSON.stringify({parsedQuery, nlQuery, baselineNlQuery, parameters, executionTime, result: result.slice(0, 10)}) + "\n");

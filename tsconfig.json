@@ -13,6 +13,7 @@
         "downlevelIteration": true,
         "baseUrl": "./src",
         "skipLibCheck": true,
+        "composite":true,
         "paths": {
             "*": [
                 "node_modules/*"
