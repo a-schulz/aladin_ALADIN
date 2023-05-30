@@ -5,23 +5,38 @@ const router = require('express').Router()
 
 const lti = require('ltijs').Provider
 
+import { TaskRouteManager, ISerializedTaskRoute } from "./api/TaskRouteManager";
+import { taskParts } from "./api/TaskGraphManager";
+const serializedRoutes: Array<ISerializedTaskRoute> = taskParts.API;
+
 // Setup
 lti.setup("LTI_KEY",
   {
     url: 'mongodb://localhost/?authSource=admin',
     connection: { user: 'aladin', pass: 'aladin' }
   }, {
+    appRoute: "/launch",
     staticPath: path.join(__dirname, './public'), // Path to static files
     cookies: {
-      secure: false, // Set secure to true if the testing platform is in a different domain and https is being used
-      sameSite: '' // Set sameSite to 'None' if the testing platform is in a different domain and https is being used
+      secure: true, // Set secure to true if the testing platform is in a different domain and https is being used
+      sameSite: "None" // Set sameSite to 'None' if the testing platform is in a different domain and https is being used
     },
-    devMode: true // Set DevMode to true if the testing platform is in a different domain and https is not being used
+    devMode: false // Set DevMode to true if the testing platform is in a different domain and https is not being used
   })
+
+
+const taskRouteManager = new TaskRouteManager(lti.app);
+taskRouteManager.addRoute(serializedRoutes);
+
+
+lti.whitelist(new RegExp(/^\/api\/.*/))
 
 // When receiving successful LTI launch redirects to app
 lti.onConnect(async (token: any, req: any, res: any) => {
-  return res.sendFile(path.join(__dirname, './public/index.html'))
+  // console.log(token)
+  const task = `task/${token.platformContext.custom.task}`
+  lti.redirect(res, `/${task}`)
+  // return res.sendFile(path.join(__dirname, './public/index.html'))
 })
 
 // When receiving deep linking request redirects to deep screen
@@ -139,13 +154,24 @@ router.get('/info', async (req: any, res: any) => {
   if (context.context) info.context = context.context
 
   return res.send(info)
-})
+});
+
+(async () => {
+  const { taskGraph } = await import("./api/TaskGraphManager");
+  const { replayRoutes } = await import("./api/Replay");
+  lti.app.use("/api", taskGraph(router));
+  lti.app.use("/api", replayRoutes(router));
+})();
 
 // Wildcard route to deal with redirecting to React routes
-router.get('*', (req: any, res: any) => res.sendFile(path.join(__dirname, '../public/index.html')))
+router.get('*', (req: any, res: any) => {
+  // console.log(req.query.token)
+  // console.log(req.query)
+  res.sendFile(path.join(__dirname, './public/index.html'))
+})
 
 // Setting up routes
-lti.app.use(router)
+lti.app.use(router);
 
 // Setup function
 const setup = async () => {
@@ -155,13 +181,25 @@ const setup = async () => {
    * Register platform
    */
   await lti.registerPlatform({
-    url: 'https://bildungsportal.sachsen.de/opal/',
+    url: 'https://bildungsportal.sachsen.de/opal',
     name: 'Platform',
-    clientId: 'CLIENTID',
-    authenticationEndpoint: 'https://bildungsportal.sachsen.de/lti/auth.php',
-    accesstokenEndpoint: 'https://bildungsportal.sachsen.de/lti/token.php',
-    authConfig: { method: 'JWK_SET', key: 'https://bildungsportal.sachsen.de/lti/certs.php' }
+    clientId: 'OPALADIN',
+    authenticationEndpoint: 'https://bildungsportal.sachsen.de/opal/ltiauth',
+    accesstokenEndpoint: 'https://bildungsportal.sachsen.de/opal/restapi/lti/token',
+    authConfig: { method: 'JWK_SET', key: 'https://bildungsportal.sachsen.de/opal/restapi/lti/keys' }
   })
+
+  const platform = await lti.registerPlatform({
+    url: 'https://bildungsportal.sachsen.de/preview/opal',
+    name: 'Platform',
+    clientId: 'OPALADIN',
+    authenticationEndpoint: 'https://bildungsportal.sachsen.de/preview/opal/ltiauth/',
+    accesstokenEndpoint: 'https://bildungsportal.sachsen.de/preview/opal/restapi/lti/token',
+    authConfig: { method: 'JWK_SET', key: 'https://bildungsportal.sachsen.de/preview/opal/restapi/lti/keys' }
+  })
+
+  // const authConfig = await platform.platformAuthConfig()
+  // console.log(authConfig)
 }
 
 setup()

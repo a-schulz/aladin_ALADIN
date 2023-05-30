@@ -44,6 +44,7 @@ export const taskGraph = (router: Router) => {
 	});
 
 	router.get("/fetchTasklist", async (req, res) => {
+		console.log("req")
 		try {
 			const names = Object.values(tasks).map((task) => task.name);
 			res.status(200).json(JSON.stringify(names));

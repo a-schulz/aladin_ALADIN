@@ -25,7 +25,9 @@ const introspectType = (value: any): string => {
 };
 
 export class TaskRouteManager {
-	constructor(private api: Application) {}
+	constructor(private api: Application) {
+		console.log(api)
+	}
 
 	public addRoute(routes: Array<ISerializedTaskRoute>) {
 		routes.forEach((route) => {
