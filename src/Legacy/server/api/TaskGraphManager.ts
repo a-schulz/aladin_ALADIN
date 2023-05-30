@@ -16,7 +16,7 @@ function readTasks(dir: string) {
 	return tasks;
 }
 
-const tasks: { [key: string]: { API: object; Worker: object; UI: { [key: string]: any }; name: string } } = readTasks(
+export const tasks: { [key: string]: { API: object; Worker: object; UI: { [key: string]: any }; name: string } } = readTasks(
 	`${__dirname}/../tempTaskGraphStorage/tasks`
 );
 
@@ -44,7 +44,6 @@ export const taskGraph = (router: Router) => {
 	});
 
 	router.get("/fetchTasklist", async (req, res) => {
-		console.log("req")
 		try {
 			const names = Object.values(tasks).map((task) => task.name);
 			res.status(200).json(JSON.stringify(names));

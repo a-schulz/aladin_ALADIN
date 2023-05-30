@@ -6,7 +6,7 @@ const router = require('express').Router()
 const lti = require('ltijs').Provider
 
 import { TaskRouteManager, ISerializedTaskRoute } from "./api/TaskRouteManager";
-import { taskParts } from "./api/TaskGraphManager";
+import { taskParts, tasks } from "./api/TaskGraphManager";
 const serializedRoutes: Array<ISerializedTaskRoute> = taskParts.API;
 
 // Setup
@@ -30,6 +30,7 @@ taskRouteManager.addRoute(serializedRoutes);
 
 
 lti.whitelist(new RegExp(/^\/api\/.*/))
+lti.whitelist(new RegExp(/^\/.*/))
 
 // When receiving successful LTI launch redirects to app
 lti.onConnect(async (token: any, req: any, res: any) => {
@@ -164,10 +165,13 @@ router.get('/info', async (req: any, res: any) => {
 })();
 
 // Wildcard route to deal with redirecting to React routes
-router.get('*', (req: any, res: any) => {
-  // console.log(req.query.token)
-  // console.log(req.query)
-  res.sendFile(path.join(__dirname, './public/index.html'))
+router.get('/*', (req: any, res: any) => {
+  if (req.originalUrl === "/api/fetchTasklist") {
+    const names = Object.values(tasks).map((task) => task.name);
+    res.status(200).json(JSON.stringify(names));
+  } else {
+    res.sendFile(path.join(__dirname, './public/index.html'))
+  }
 })
 
 // Setting up routes
