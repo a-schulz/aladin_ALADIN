@@ -4,7 +4,7 @@ const lti = require("ltijs").Provider;
 
 import { Router } from "express";
 
-export const LTIRoutes = (router: Router) => {
+export const LTIAdvantageRoutes = (router: Router) => {
 	// Grading route
 	router.post("/grade", async (req, res) => {
 		try {

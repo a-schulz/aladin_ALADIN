@@ -1,7 +1,7 @@
 require('dotenv').config()
 const path = require('path')
 const router = require('express').Router()
-// const routes = require('./src/routes')
+const routes = require('./src/api/LTI/advantage')
 
 const lti = require('ltijs').Provider
 
@@ -34,9 +34,12 @@ lti.whitelist(new RegExp(/^\/.*/))
 
 // When receiving successful LTI launch redirects to app
 lti.onConnect(async (token: any, req: any, res: any) => {
-  // console.log(token)
-  const task = `task/${token.platformContext.custom.task}`
-  lti.redirect(res, `/${task}`)
+  if (token && token.hasOwnProperty("platformContext")) {
+    const task = `task/${token.platformContext.custom.task}`
+    lti.redirect(res, `/${task}`)
+  } else {
+    lti.redirect(res, `/`)
+  }
   // return res.sendFile(path.join(__dirname, './public/index.html'))
 })
 
@@ -44,118 +47,6 @@ lti.onConnect(async (token: any, req: any, res: any) => {
 lti.onDeepLinking(async (token: any, req: any, res: any) => {
   return lti.redirect(res, '/deeplink', { newResource: true })
 })
-
-router.post('/grade', async (req: any, res: any) => {
-  try {
-    const idtoken = res.locals.token // IdToken
-    const score = req.body.grade // User numeric score sent in the body
-    // Creating Grade object
-    const gradeObj = {
-      userId: idtoken.user,
-      scoreGiven: score,
-      scoreMaximum: 100,
-      activityProgress: 'Completed',
-      gradingProgress: 'FullyGraded'
-    }
-
-    // Selecting linetItem ID
-    let lineItemId = idtoken.platformContext.endpoint.lineitem // Attempting to retrieve it from idtoken
-    if (!lineItemId) {
-      const response = await lti.Grade.getLineItems(idtoken, { resourceLinkId: true })
-      const lineItems = response.lineItems
-      if (lineItems.length === 0) {
-        // Creating line item if there is none
-        console.log('Creating new line item')
-        const newLineItem = {
-          scoreMaximum: 100,
-          label: 'Grade',
-          tag: 'grade',
-          resourceLinkId: idtoken.platformContext.resource.id
-        }
-        const lineItem = await lti.Grade.createLineItem(idtoken, newLineItem)
-        lineItemId = lineItem.id
-      } else lineItemId = lineItems[0].id
-    }
-
-    // Sending Grade
-    const responseGrade = await lti.Grade.submitScore(idtoken, lineItemId, gradeObj)
-    return res.send(responseGrade)
-  } catch (err) {
-    console.log(err.message)
-    return res.status(500).send({ err: err.message })
-  }
-})
-
-// Names and Roles route
-router.get('/members', async (req: any, res: any) => {
-  try {
-    const result = await lti.NamesAndRoles.getMembers(res.locals.token)
-    if (result) return res.send(result.members)
-    return res.sendStatus(500)
-  } catch (err) {
-    console.log(err.message)
-    return res.status(500).send(err.message)
-  }
-})
-
-// Deep linking route
-router.post('/deeplink', async (req: any, res: any) => {
-  try {
-    const resource = req.body
-
-    const items = {
-      type: 'ltiResourceLink',
-      title: 'Ltijs Demo',
-      custom: {
-        name: resource.name,
-        value: resource.value
-      }
-    }
-
-    const form = await lti.DeepLinking.createDeepLinkingForm(res.locals.token, items, { message: 'Successfully Registered' })
-    if (form) return res.send(form)
-    return res.sendStatus(500)
-  } catch (err) {
-    console.log(err.message)
-    return res.status(500).send(err.message)
-  }
-})
-
-// Return available deep linking resources
-router.get('/resources', async (req: any, res: any) => {
-  const resources = [
-    {
-      name: 'Resource1',
-      value: 'value1'
-    },
-    {
-      name: 'Resource2',
-      value: 'value2'
-    },
-    {
-      name: 'Resource3',
-      value: 'value3'
-    }
-  ]
-  return res.send(resources)
-})
-
-// Get user and context information
-router.get('/info', async (req: any, res: any) => {
-  const token = res.locals.token
-  const context = res.locals.context
-
-  const info: any = { };
-  if (token.userInfo) {
-    if (token.userInfo.name) info.name = token.userInfo.name
-    if (token.userInfo.email) info.email = token.userInfo.email
-  }
-
-  if (context.roles) info.roles = context.roles
-  if (context.context) info.context = context.context
-
-  return res.send(info)
-});
 
 (async () => {
   const { taskGraph } = await import("./api/TaskGraphManager");
@@ -175,6 +66,7 @@ router.get('/*', (req: any, res: any) => {
 })
 
 // Setting up routes
+lti.app.use(routes);
 lti.app.use(router);
 
 // Setup function
@@ -200,6 +92,15 @@ const setup = async () => {
     authenticationEndpoint: 'https://bildungsportal.sachsen.de/preview/opal/ltiauth/',
     accesstokenEndpoint: 'https://bildungsportal.sachsen.de/preview/opal/restapi/lti/token',
     authConfig: { method: 'JWK_SET', key: 'https://bildungsportal.sachsen.de/preview/opal/restapi/lti/keys' }
+  })
+
+  const referencePlatform = await lti.registerPlatform({
+    url: '1',
+    name: 'OPALexample',
+    clientId: 'OPALexampleID',
+    authenticationEndpoint: 'https://lti-ri.imsglobal.org/platforms/4244/authorizations/new',
+    accesstokenEndpoint: 'https://lti-ri.imsglobal.org/platforms/4244/access_tokens',
+    authConfig: { method: 'RSA_KEY', key: '-----BEGIN PUBLIC KEY----- MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq9GHlEtAolsmxr5wpaUM\n' + "J6/LccSKH1I/cDlh5yYEsp2FYD6ppFpjcyCAZXfXOScbz+LS6hmPpscrAYj7noKG\n" + "MbzPKAuDh28dC5CN+jUpQxu2FyRh95m4aLzzIq6pYnmCMdPZ21EtF/rJhQvmPa66\n" + "vlp4l9lwhGtPgVS8tJcNh9XawoogZfbw067mT/YxSpqJHwNjnO1uZ6YyIykT3tEF TvGqjlIouy/1oCjXgmdKeSHPu+Xr/Kj2RsN2M4DyrIIKEE2VFL+R1ugLct/OzvRk\n" + "aTqqWuZLQCeOojfKwDnI081GxLmrowWXn8sWnrWpUn5JhlM+znL/8MX1qJyss0NQ qwIDAQAB -----END PUBLIC KEY-----" }
   })
 }
 
