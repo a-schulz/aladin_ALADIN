@@ -184,26 +184,23 @@ const setup = async () => {
   /**
    * Register platform
    */
-  await lti.registerPlatform({
+  const livePlatform = await lti.registerPlatform({
     url: 'https://bildungsportal.sachsen.de/opal',
-    name: 'Platform',
-    clientId: 'OPALADIN',
+    name: 'OPAL',
+    clientId: 'OPALADIN_Live',
     authenticationEndpoint: 'https://bildungsportal.sachsen.de/opal/ltiauth',
     accesstokenEndpoint: 'https://bildungsportal.sachsen.de/opal/restapi/lti/token',
     authConfig: { method: 'JWK_SET', key: 'https://bildungsportal.sachsen.de/opal/restapi/lti/keys' }
   })
 
-  const platform = await lti.registerPlatform({
+  const previewPlatform = await lti.registerPlatform({
     url: 'https://bildungsportal.sachsen.de/preview/opal',
-    name: 'Platform',
-    clientId: 'OPALADIN',
+    name: 'OPAL_Preview',
+    clientId: 'OPALADIN_Preview',
     authenticationEndpoint: 'https://bildungsportal.sachsen.de/preview/opal/ltiauth/',
     accesstokenEndpoint: 'https://bildungsportal.sachsen.de/preview/opal/restapi/lti/token',
     authConfig: { method: 'JWK_SET', key: 'https://bildungsportal.sachsen.de/preview/opal/restapi/lti/keys' }
   })
-
-  // const authConfig = await platform.platformAuthConfig()
-  // console.log(authConfig)
 }
 
 setup()
