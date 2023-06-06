@@ -1,5 +1,7 @@
 # ALADIN
 
+T**a**sk and so**l**ution (hint) gener**a**tor **d**estined for **i**nformatics and **n**eighbouring domains
+
 ## Task artefact
 
 A task artefact can be any resource that is used in a task. A non-exhaustive list of examples:
