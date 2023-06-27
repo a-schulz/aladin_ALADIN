@@ -6,7 +6,8 @@
 	"types": "dist/index.d.ts",
 	"scripts": {
 		"prepublish": "tsc",
-		"test": "jest"
+		"test": "jest",
+		"start": "ts-node src/Legacy/server/serverLTI.ts"
 	},
 	"keywords": [
 		"aladin",
