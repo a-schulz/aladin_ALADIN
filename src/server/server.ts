@@ -1,9 +1,7 @@
 require("dotenv").config();
 const path = require("path");
 const router = require("express").Router();
-// const routes = require("./api/LTI/advantage");
-import { LTIAdvantageRoutes } from "./api/LTI/advantage";
-import { PlatformRoutes } from "./api/LTI/platformHandling";
+const routes = require("./api/LTI/advantage");
 
 const lti = require("ltijs").Provider;
 
@@ -13,10 +11,10 @@ const serializedRoutes: Array<ISerializedTaskRoute> = taskParts.API;
 
 // Setup
 lti.setup(
-	process.env.LTI_KEY,
+	"LTI_KEY",
 	{
-		url: `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}`,
-		connection: { user: process.env.MONGO_USER, pass: process.env.MONGO_PW },
+		url: "mongodb://localhost:27017",
+		connection: { user: "aladin", pass: "aladin" },
 	},
 	{
 		appRoute: "/launch",
@@ -25,16 +23,7 @@ lti.setup(
 			secure: true, // Set secure to true if the testing platform is in a different domain and https is being used
 			sameSite: "None", // Set sameSite to 'None' if the testing platform is in a different domain and https is being used
 		},
-		devMode: false, // Set DevMode to true if the testing platform is in a different domain and https is not being used,
-		bodyParserOpt: {
-			json: {
-				limit: "50mb",
-			},
-			urlencoded: {
-				extended: false,
-				limit: "50mb",
-			},
-		},
+		devMode: false, // Set DevMode to true if the testing platform is in a different domain and https is not being used
 	}
 );
 
@@ -52,6 +41,7 @@ lti.onConnect(async (token: any, req: any, res: any) => {
 	} else {
 		lti.redirect(res, `/`);
 	}
+	// return res.sendFile(path.join(__dirname, './public/index.html'))
 });
 
 // When receiving deep linking request redirects to deep screen
@@ -64,14 +54,12 @@ lti.onDeepLinking(async (token: any, req: any, res: any) => {
 	const { replayRoutes } = await import("./api/Replay");
 	lti.app.use("/api", taskGraph(router));
 	lti.app.use("/api", replayRoutes(router));
-	lti.app.use("/api", PlatformRoutes(router));
-
-	lti.app.use("", LTIAdvantageRoutes(router));
 })();
 
-// Wildcard route to deal with redirecting to Vue routes
+// Wildcard route to deal with redirecting to React routes
 router.get("/*", (req: any, res: any) => {
 	if (/fetchTasklist/i.test(req.originalUrl)) {
+		console.log("worked");
 		const names = Object.values(tasks).map((task) => task.name);
 		res.status(200).json(JSON.stringify(names));
 	} else {
@@ -80,11 +68,13 @@ router.get("/*", (req: any, res: any) => {
 });
 
 // Setting up routes
+// lti.app.use(routes);
 lti.app.use(router);
 
 // Setup function
 const setup = async () => {
 	await lti.deploy({ port: "8000" });
+
 	/**
 	 * Register platform
 	 */

@@ -5,7 +5,6 @@
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
-		"prepublish": "tsc",
 		"test": "jest",
 		"start": "ts-node src/Legacy/server/serverLTI.ts"
 	},
