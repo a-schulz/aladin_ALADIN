@@ -6,7 +6,7 @@
 	"types": "dist/index.d.ts",
 	"scripts": {
 		"test": "jest",
-		"start": "ts-node src/Legacy/server/serverLTI.ts"
+		"start": "ts-node src/Legacy/server/serverLTI_local.ts"
 	},
 	"keywords": [
 		"aladin",
