@@ -1,0 +1,1 @@
+. | {API: {task: .API[].task}, UI: {task: .UI.currentTask, components: .UI.nodes | map(.components)}}

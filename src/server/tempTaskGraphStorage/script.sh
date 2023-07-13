@@ -1,0 +1,1 @@
+jq -f jq_tasks/Gozintograph.txt tasks/Gozintograph.json
