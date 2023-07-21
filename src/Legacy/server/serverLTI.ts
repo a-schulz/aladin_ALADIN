@@ -13,7 +13,7 @@ const serializedRoutes: Array<ISerializedTaskRoute> = taskParts.API;
 lti.setup(
 	"LTI_KEY",
 	{
-		url: "mongodb://mongodb:27017",
+		url: "mongodb://localhost:27017",
 		connection: { user: "aladin", pass: "aladin" },
 	},
 	{
