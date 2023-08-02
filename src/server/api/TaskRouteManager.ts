@@ -1,4 +1,4 @@
-import { Request, Response, Application } from "express";
+import express from "express";
 import { executeTask, IInstructionConfiguration } from "../TaskWrapper";
 
 export type HTTPMethod = "get" | "post" | "put" | "delete";
@@ -25,14 +25,14 @@ const introspectType = (value: any): string => {
 };
 
 export class TaskRouteManager {
-	constructor(private api: Application) {
-		console.log(api)
-	}
+	constructor(private api: express.Application) {}
 
 	public addRoute(routes: Array<ISerializedTaskRoute>) {
 		routes.forEach((route) => {
-			this.api[route.httpMethod](`/api/${route.task}/${route.name}`, (req, res, next) =>
-				this.requestHandler(req, res, route)
+			this.api[route.httpMethod](
+				`/api/${route.task}/${route.name}`,
+				(req: express.Request, res: express.Response, next: express.NextFunction) =>
+					this.requestHandler(req, res, route)
 			);
 		});
 	}
@@ -43,9 +43,8 @@ export class TaskRouteManager {
 		});
 	}
 
-	private async requestHandler(req: Request, res: Response, serializedRoute: ISerializedTaskRoute) {
+	private async requestHandler(req: express.Request, res: express.Response, serializedRoute: ISerializedTaskRoute) {
 		const { params, task } = serializedRoute;
-		// console.log(this.validateParameters(req, params));
 		const parsedParameters = params ? this.validateParameters(req, params) : {};
 		if (parsedParameters.error) {
 			res.status(400).json(
@@ -70,7 +69,7 @@ export class TaskRouteManager {
 		// }
 	}
 
-	private validateParameters(req: Request, params: ITaskParameters): { [key: string]: any } {
+	private validateParameters(req: express.Request, params: ITaskParameters): { [key: string]: any } {
 		const paramIdentifier = req.method === "GET" ? "params" : "body";
 
 		const mismatchedTypes = Object.entries(params).filter(([name, type]) => {

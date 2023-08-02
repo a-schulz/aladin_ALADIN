@@ -1,11 +1,11 @@
-import { GozintographTaskGenerator } from "../Tasks/gozintograph/Task";
-import { sqlQueryGenerator, sqlQueryValidator, importDatabase, fetchERD } from "../Tasks/SQL/SQLTaskWorker";
-import { semanticSqlQueryGenerator } from "../Tasks/SQL/semanticSQLWorker/SQLTaskGenerator";
-import { semanticSqlQueryValidator } from "../Tasks/SQL/semanticSQLWorker/SQLValidator";
-import { InterpolationTaskGenerator } from "../Tasks/geoInterpolation/GeoInterpolationWorker";
-import { ShortestPathTaskGenerator } from "../Tasks/shortestPath/MunkeltWorker";
-import { EPKTaskGenerator } from "../Tasks/EPK/EPKTask";
-import { SchedulingTaskGenerator } from "../Tasks/scheduling/Task";
+import { GozintographTaskGenerator } from "../Legacy/Tasks/gozintograph/Task";
+import { sqlQueryGenerator, sqlQueryValidator, importDatabase, fetchERD } from "../Legacy/Tasks/SQL/SQLTaskWorker";
+import { semanticSqlQueryGenerator } from "../Legacy/Tasks/SQL/semanticSQLWorker/SQLTaskGenerator";
+import { semanticSqlQueryValidator } from "../Legacy/Tasks/SQL/semanticSQLWorker/SQLValidator";
+import { InterpolationTaskGenerator } from "../Legacy/Tasks/geoInterpolation/GeoInterpolationWorker";
+import { ShortestPathTaskGenerator } from "../Legacy/Tasks/shortestPath/MunkeltWorker";
+import { EPKTaskGenerator } from "../Legacy/Tasks/EPK/EPKTask";
+import { SchedulingTaskGenerator } from "../Legacy/Tasks/scheduling/Task";
 
 import fs from "fs";
 import path from "path";
