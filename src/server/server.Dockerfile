@@ -1,9 +1,9 @@
-FROM node
+FROM node:20.3.1
 
-WORKDIR /server
-RUN ls -l
-# RUN npm i
 RUN npm i -g ts-node
-RUN cd src/server/server.ts
+WORKDIR /src
+ADD package.json package-lock.json ./
+RUN npm install
+ADD ./src ./
 
-CMD ts-node server.ts
+CMD ts-node --transpileOnly ./server/server.ts
