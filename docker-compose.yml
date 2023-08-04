@@ -1,3 +1,4 @@
+# docker compose --env-file docker.env up
 version: "3.8"
 services:
     server:
@@ -8,7 +9,7 @@ services:
 #        depends_on:
 #            - postgres_2
         volumes:
-            - ./src/server:/server
+            - ./src/server:/src/server
         ports:
             - ${ALADIN_PORT}:${ALADIN_PORT}
         environment:
