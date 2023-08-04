@@ -30,6 +30,7 @@
 			"4": []
 		},
 		"currentNode": 0,
+		"taskMode": "practice",
 		"nodes": {
 			"0": {
 				"zoomScale": 1,
@@ -165,6 +166,10 @@
 						"name": "Netzplan",
 						"isValid": false,
 						"methods": { "showSolution": "Zeige Lösung" },
+						"contextMenu": {
+							"isOpen": false,
+							"usedMethods": []
+						},
 						"dependencies": {
 							"DOTGraph": { "dotDescription": "taskData__dotVertexGraph" },
 							"PlanGraph": { "dotDescription": "taskData__dotVertexGraph", "validation": "taskData__dummyGraph" }

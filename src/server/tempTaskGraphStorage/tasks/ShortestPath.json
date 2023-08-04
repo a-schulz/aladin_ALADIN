@@ -27,6 +27,7 @@
 			"1": []
 		},
 		"currentNode": 0,
+		"taskMode": "practice",
 		"nodes": {
 			"0": {
 				"zoomScale": 1,

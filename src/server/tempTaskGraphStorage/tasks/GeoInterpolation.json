@@ -27,6 +27,7 @@
 			"1": []
 		},
 		"currentNode": 0,
+		"taskMode": "practice",
 		"nodes": {
 			"0": {
 				"zoomScale": 1,
@@ -164,10 +165,6 @@
 				"interjections": [
 					{
 						"method": "formulaGenerator",
-						"contextMenu": {
-							"isOpen": false,
-							"usedMethods": []
-						},
 						"dependencies": {
 							"variables": "nodes__1__components__0__component__Equation__variables",
 							"formula": "nodes__1__components__0__component__formula",
