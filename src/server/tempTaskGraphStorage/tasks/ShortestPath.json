@@ -146,7 +146,7 @@
 								"initialControls": "taskData__controlObject"
 							}
 						},
-						"methods": { "solveStep": "Nächste Iteration" },
+						"methods": { "solveStep": {"description":  "Nächste Iteration", "impact":  1} },
 						"contextMenu": {
 							"isOpen": false,
 							"usedMethods": []
