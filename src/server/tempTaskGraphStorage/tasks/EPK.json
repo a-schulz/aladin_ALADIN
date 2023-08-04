@@ -160,7 +160,7 @@
 						"type": "EditableGraph",
 						"name": "Kalkulation",
 						"isValid": false,
-						"methods": { "showSolution": "Zeige Lösung" },
+						"methods": { "showSolution": {"description": "Zeige Lösung", "impact": 0} },
 						"contextMenu": {
 							"isOpen": false,
 							"usedMethods": []
