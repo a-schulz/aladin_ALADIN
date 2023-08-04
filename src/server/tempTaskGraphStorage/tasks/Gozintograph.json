@@ -184,6 +184,10 @@
 							}
 						}
 					}
+        },
+        "evaluation": {
+          "timeToSolve": 9999999999,
+          "maximumScore": 5
 				}
 			},
 			"1": {
@@ -715,6 +719,10 @@
 						"dependencies": { "DOTGraph": { "dotDescription": "taskData__dotDescription" } },
 						"component": {}
 					}
+        },
+        "evaluation": {
+          "timeToSolve": 600,
+          "maximumScore": 10
 				}
 			},
 			"7": {
@@ -919,6 +927,10 @@
 							"columnLabel": ""
 						}
 					}
+        },
+        "evaluation": {
+          "timeToSolve": 1200,
+          "maximumScore": 20
 				}
 			},
 			"8": {
