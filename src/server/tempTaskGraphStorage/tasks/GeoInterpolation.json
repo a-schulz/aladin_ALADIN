@@ -201,7 +201,7 @@
 						"dependencies": {
 							"Equation": { "aladinAST": "nodes__1__components__0__component__aladinAST" }
 						},
-						"methods": { "fillConstants": "Ergänze Konstanten", "showSolution": "Zeige Lösung" },
+						"methods": { "fillConstants": {"description": "Ergänze Konstanten", "impact": 0.5}, "showSolution": {"description": "Zeige Lösung", "impact": 0} },
 						"contextMenu": {
 							"isOpen": false,
 							"usedMethods": []
