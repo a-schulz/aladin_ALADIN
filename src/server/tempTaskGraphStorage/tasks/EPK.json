@@ -169,7 +169,10 @@
 							"usedMethods": []
 						},
 						"component": {},
-						"dependencies": {}
+						"dependencies": {
+							"DOTGraph": { "dotDescription": "taskData__dummyGraph" },
+							"EditableGraph": { "solution": "taskData__dotDescription", "validation": "taskData__graph__nodes" }
+						}
 					}
 				}
 			}
