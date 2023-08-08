@@ -80,7 +80,6 @@
 						"type": "DOTGraph",
 						"name": "Gozintograph",
 						"isValid": true,
-						"isCorrect": true,
 						"dependencies": { "DOTGraph": { "dotDescription": "taskData__dotDescription" } },
 						"component": {}
 					},

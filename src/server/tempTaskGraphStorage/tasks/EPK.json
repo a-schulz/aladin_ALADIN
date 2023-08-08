@@ -23,7 +23,8 @@
 		"rootNode": 0,
 		"topology": [[0, null, null]],
 		"edges": {
-			"0": []
+			"0": [1],
+			"1": []
 		},
 		"currentNode": 0,
 		"taskMode": "practice",
@@ -38,6 +39,7 @@
 						{ "x": 36, "y": 29, "w": 2, "h": 2, "i": 1, "static": false }
 					]
 				},
+				"isValid": false,
 				"components": {
 					"0": {
 						"type": "DOTGraph",
@@ -126,7 +128,7 @@
 				"layouts": {
 					"sm": [{ "x": 12, "y": 5, "w": 2, "h": 5, "i": 1, "static": false }],
 					"md": [{ "x": 0, "y": 10, "w": 2, "h": 5, "i": 1, "static": false }],
-					"lg": [{ "x": 32, "y": 29, "w": 8, "h": 4, "i": 0, "static": false }]
+					"lg": [{ "x": 32, "y": 29, "w": 8, "h": 6, "i": 0, "static": false }]
 				},
 				"modals": [
 					{
@@ -157,22 +159,17 @@
 				},
 				"components": {
 					"0": {
-						"type": "EditableGraph",
-						"name": "Kalkulation",
+						"type": "DnDContainer",
+						"name": "Modellierung",
 						"isValid": false,
-						"methods": { "showSolution": "Zeige Lösung" },
+						"isCorrect": false,
+						"methods": {},
 						"contextMenu": {
 							"isOpen": false,
 							"usedMethods": []
 						},
-						"component": {
-							"editableFields": ["tb", "fb", "est", "eet", "lst", "let"],
-							"userValues": null
-						},
-						"dependencies": {
-							"DOTGraph": { "dotDescription": "taskData__dummyGraph" },
-							"EditableGraph": { "solution": "taskData__dotDescription", "validation": "taskData__graph__nodes" }
-						}
+						"component": {},
+						"dependencies": {}
 					}
 				}
 			}
